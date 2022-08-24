@@ -1,3 +1,30 @@
+local function tw(target,changes,style,dir,tim)
+	game:GetService('TweenService'):Create(target,TweenInfo.new(tim,Enum.EasingStyle[style],Enum.EasingDirection[dir]),changes):Play()
+end
+
+local function colorHover(target,hoverColor,colorType)
+	local oldColor = target[colorType]
+	target.MouseEnter:Connect(function()
+		tw(target,{[colorType] = hoverColor},"Quint","Out",.3)
+	end)
+	target.MouseLeave:Connect(function()
+		tw(target,{[colorType] = oldColor},"Quint","Out",.3)
+	end)
+end
+
+
+local anime=Instance.new("ImageLabel")anime.Name="anim";anime.BackgroundColor3=Color3.fromRGB(255, 255, 255) anime.BackgroundTransparency=1;anime.Image="http://www.roblox.com/asset/?id=2091181653";anime.ImageTransparency=.8; local ms=game.Players.LocalPlayer:GetMouse() local ts = game:GetService("TweenService") local ti = TweenInfo.new(1,Enum.EasingStyle.Quint) local size; function ButtonAnim(UIPart) UIPart.ClipsDescendants=true; UIPart.MouseButton1Click:Connect(function() local anim = anime:Clone() anim.Parent=UIPart; local mathx = (ms.X-UIPart.AbsolutePosition.X) local mathy = (ms.Y-UIPart.AbsolutePosition.Y) anim.Position=UDim2.new(0,mathx-(anim.AbsoluteSize.X/2),0,mathy-(anim.AbsoluteSize.Y/2)) size = (UIPart.AbsoluteSize.X+UIPart.AbsoluteSize.Y) local tw = ts:Create(anim, ti, { Size = UDim2.new(0,size,0,size), ImageTransparency = 1, Position = UDim2.new(0,mathx-(size/2),0,mathy-(size/2)) }) tw:Play() repeat wait()until anim.ImageTransparency==1 anim:Destroy() end) end
+
+coroutine.resume(coroutine.create(function()
+	while true do
+		tw(UIGradient,{Rotation=UIGradient.Rotation+360},"Linear","In",6)
+		tw(Dropdownglow.UIGradient,{Rotation=UIGradient.Rotation+360},"Linear","In",6)
+		tw(ColorpickerFrame.Dropdownglow.UIGradient,{Rotation=UIGradient.Rotation+360},"Linear","In",6)
+		wait(6)
+	end
+end))
+
+
 local library = {}
 
 local TweenService = game:GetService("TweenService")
@@ -545,28 +572,8 @@ function library:Window(options)
                         uibutton_corner.Name = "uibutton_corner"
                         uibutton_corner.Parent = uiButton
                         
-                        local function tw(target,changes,style,dir,tim)
-	game:GetService('TweenService'):Create(target,TweenInfo.new(tim,Enum.EasingStyle[style],Enum.EasingDirection[dir]),changes):Play()
-end
-
-local function colorHover(target,hoverColor,colorType)
-	local oldColor = target[colorType]
-	target.MouseEnter:Connect(function()
-		tw(target,{[colorType] = hoverColor},"Quint","Out",.3)
-	end)
-	target.MouseLeave:Connect(function()
-		tw(target,{[colorType] = oldColor},"Quint","Out",.3)
-	end)
-end
-
-                        
-                        	uiButton.MouseEnter:Connect(function()
-		tw(new,{BackgroundTransparency=.7},'Quint','Out',.3)
-	end)
-	uiButton.MouseLeave:Connect(function()
-		tw(new,{BackgroundTransparency=.8},'Quint','Out',.3)
-	end)
-                        
+                        ButtonAnim(uiButton)
+						
                         uiButton.MouseButton1Click:Connect(function()
                             callback()
                         end)
